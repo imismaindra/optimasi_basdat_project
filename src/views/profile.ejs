@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - StatusShare</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                container: {
+                    center: true,
+                    padding: "2rem",
+                    screens: {
+                        "2xl": "1400px",
+                    },
+                },
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        popover: {
+                            DEFAULT: "hsl(var(--popover))",
+                            foreground: "hsl(var(--popover-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        @layer base {
+            :root {
+                --background: 0 0% 100%;
+                --foreground: 222.2 84% 4.9%;
+                --card: 0 0% 100%;
+                --card-foreground: 222.2 84% 4.9%;
+                --popover: 0 0% 100%;
+                --popover-foreground: 222.2 84% 4.9%;
+                --primary: 221.2 83.2% 53.3%;
+                --primary-foreground: 210 40% 98%;
+                --secondary: 210 40% 96.1%;
+                --secondary-foreground: 222.2 47.4% 11.2%;
+                --muted: 210 40% 96.1%;
+                --muted-foreground: 215.4 16.3% 46.9%;
+                --accent: 210 40% 96.1%;
+                --accent-foreground: 222.2 47.4% 11.2%;
+                --destructive: 0 84.2% 60.2%;
+                --destructive-foreground: 210 40% 98%;
+                --border: 214.3 31.8% 91.4%;
+                --input: 214.3 31.8% 91.4%;
+                --ring: 221.2 83.2% 53.3%;
+                --radius: 0.5rem;
+            }
+        }
+        body {
+            @apply bg-background text-foreground;
+        }
+    </style>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50/50 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div class="container flex h-16 max-w-screen-2xl items-center justify-between">
+            <a href="/?user_id=<%= currentUserId %>" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                </div>
+                <span class="font-bold text-xl tracking-tight">StatusShare</span>
+            </a>
+
+            <% if(typeof loggedInUser !== 'undefined' && loggedInUser) { %>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center text-sm font-medium text-muted-foreground mr-2">
+                         <span class="text-foreground ml-1"><%= loggedInUser.username %></span>
+                    </div>
+                    
+                    <a href="/logout" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200">
+                        Log out
+                    </a>
+
+                    <div class="relative h-9 w-9 overflow-hidden rounded-full border border-border">
+                        <img src="<%= loggedInUser.profile_picture_url || 'https://via.placeholder.com/40' %>" class="h-full w-full object-cover">
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </nav>
+
+    <div class="container max-w-4xl py-8">
+        <!-- Profile Header -->
+        <div class="relative mb-8 pt-10">
+            <!-- Cover Image Placeholder -->
+            <div class="absolute top-0 w-full h-32 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-t-xl -z-10"></div>
+            
+            <div class="rounded-xl border bg-card text-card-foreground shadow-sm mt-16 px-8 pb-8 pt-0">
+                <div class="flex flex-col md:flex-row items-center md:items-end -mt-12 mb-6 gap-6">
+                    <div class="h-32 w-32 rounded-full border-4 border-background bg-secondary shadow-sm overflow-hidden shrink-0">
+                        <img src="<%= user.profile_picture_url || 'https://via.placeholder.com/150' %>" class="h-full w-full object-cover">
+                    </div>
+                    <div class="flex-1 text-center md:text-left mb-2">
+                        <h1 class="text-3xl font-bold tracking-tight"><%= user.username %></h1>
+                        <p class="text-muted-foreground mt-1 max-w-md mx-auto md:mx-0"><%= user.bio || 'Digital enthusiast. Living the moment.' %></p>
+                    </div>
+                    <% if(user.id != currentUserId) { %>
+                    <div class="mb-4">
+                         <button onclick="followUser(<%= user.id %>)" class="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-8 shadow-sm">
+                            Follow
+                        </button>
+                    </div>
+                    <% } %>
+                </div>
+
+                <div class="flex justify-center md:justify-start gap-8 border-t pt-6">
+                    <div class="text-center md:text-left min-w-[80px]">
+                        <div class="text-2xl font-bold"><%= user.total_posts %></div>
+                        <div class="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Posts</div>
+                    </div>
+                    <div class="text-center md:text-left min-w-[80px]">
+                        <div class="text-2xl font-bold"><%= user.followers %></div>
+                        <div class="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Followers</div>
+                    </div>
+                    <div class="text-center md:text-left min-w-[80px]">
+                        <div class="text-2xl font-bold"><%= user.following %></div>
+                        <div class="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Following</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <h3 class="text-xl font-semibold tracking-tight mb-6 px-2">Recent Activity</h3>
+        <div class="space-y-6">
+            <% posts.forEach(post => { %>
+                <div class="rounded-xl border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
+                    <div class="p-6">
+                         <div class="flex items-center gap-3 mb-4">
+                            <div class="h-10 w-10 rounded-full overflow-hidden border bg-secondary">
+                                <img src="<%= user.profile_picture_url || 'https://via.placeholder.com/40' %>" class="h-full w-full object-cover">
+                            </div>
+                            <div>
+                                <div class="font-semibold text-sm hover:underline cursor-pointer"><%= user.username %></div>
+                                <div class="text-xs text-muted-foreground"><%= new Date(post.created_at).toLocaleDateString() %></div>
+                            </div>
+                        </div>
+
+                        <div class="text-base leading-relaxed text-foreground/90">
+                            <%= post.content %>
+                        </div>
+                        <% if(post.image_url) { %>
+                            <div class="mt-4 rounded-xl overflow-hidden border bg-muted/20">
+                                <img src="<%= post.image_url %>" class="w-full object-cover max-h-[500px]">
+                            </div>
+                        <% } %>
+
+                         <div class="flex items-center gap-4 mt-4 pt-4 border-t text-muted-foreground">
+                             <div class="flex items-center gap-2 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart text-pink-500 fill-pink-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                                <%= post.likes_count_cached %> Likes
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            <% }) %>
+
+            <% if (posts.length === 0) { %>
+                <div class="text-center py-12 rounded-xl border border-dashed text-muted-foreground bg-muted/10">
+                    <p>No activity yet.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+       const currentUserId = <%= currentUserId %>;
+       async function followUser(targetId) {
+            const res = await fetch('/follow', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ follower_id: currentUserId, following_id: targetId })
+            });
+            if(res.ok) { location.reload(); }
+        }
+    </script>
+</body>
+</html>
